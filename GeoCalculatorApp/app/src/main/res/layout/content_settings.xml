@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="gvsu.vinsko.geocalculatorapp.SettingsActivity">
+
+    <RelativeLayout
+        android:layout_width="395dp"
+        android:layout_height="587dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <TextView
+            android:id="@+id/distSpinnerLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="Distance Units"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textStyle="bold"
+            android:typeface="normal"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <Spinner
+            android:id="@+id/distSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/distSpinnerLabel"
+            android:layout_marginTop="21dp" />
+
+        <TextView
+            android:id="@+id/bearSpinnerLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/distSpinner"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="Bearing Units"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textStyle="bold"
+            android:typeface="normal" />
+
+        <Spinner
+            android:id="@+id/bearSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bearSpinnerLabel"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

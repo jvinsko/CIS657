@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">GeoCalculatorApp</string>
+    <string-array name="distArray">
+        <item>"Kilometers"</item>
+        <item>"Miles"</item>
+    </string-array>
+    <string-array name="bearArray">
+        <item>"Degrees"</item>
+        <item>"Mils"</item>
+    </string-array>
+    <string name="title_activity_junk">junkActivity</string>
+    <string name="title_activity_junk2">Junk2Activity</string>
+</resources>

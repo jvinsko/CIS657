@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="gvsu.vinsko.geocalculatorapp.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="395dp"
+        android:layout_height="587dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="9dp">
+
+        <TextView
+            android:id="@+id/bearLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bearing:"
+            android:layout_alignBottom="@+id/bearResult"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/distLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Distance:"
+            android:layout_alignBaseline="@+id/distResult"
+            android:layout_alignBottom="@+id/distResult"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:id="@+id/longP1"
+            android:layout_width="167dp"
+            android:layout_height="43dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:inputType="numberSigned"
+            tools:hint="Enter Longitude for P1"
+            tools:layout_editor_absoluteX="224dp"
+            tools:layout_editor_absoluteY="8dp"
+            tools:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/latP2"
+            android:layout_width="167dp"
+            android:layout_height="43dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/latP1"
+            android:ems="10"
+            android:hint="Enter Latitude for P2"
+            android:inputType="numberSigned"
+            android:textSize="14sp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="72dp" />
+
+        <EditText
+            android:id="@+id/longP2"
+            android:layout_width="167dp"
+            android:layout_height="43dp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/longP1"
+            android:ems="10"
+            android:hint="Enter Longitude for P2"
+            android:inputType="numberSigned"
+            android:textSize="14sp"
+            tools:layout_editor_absoluteX="201dp"
+            tools:layout_editor_absoluteY="72dp" />
+
+        <TextView
+            android:id="@+id/distResult"
+            android:layout_width="267dp"
+            android:layout_height="17dp"
+            android:layout_marginTop="33dp"
+            tools:layout_editor_absoluteX="101dp"
+            tools:layout_editor_absoluteY="186dp"
+            android:layout_below="@+id/calcBtn"
+            android:layout_toEndOf="@+id/distLabel"
+            android:layout_marginStart="23dp" />
+
+        <TextView
+            android:id="@+id/bearResult"
+            android:layout_width="267dp"
+            android:layout_height="17dp"
+            android:layout_marginTop="30dp"
+            tools:layout_editor_absoluteX="101dp"
+            tools:layout_editor_absoluteY="220dp"
+            android:layout_below="@+id/distResult"
+            android:layout_alignStart="@+id/distResult" />
+
+        <Button
+            android:id="@+id/calcBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/clearBtn"
+            android:layout_alignBottom="@+id/clearBtn"
+            android:layout_alignParentStart="true"
+            android:text="Calculate"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="127dp" />
+
+        <Button
+            android:id="@+id/clearBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/latP2"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="17dp"
+            android:layout_toEndOf="@+id/calcBtn"
+            android:text="Clear"
+            tools:layout_editor_absoluteX="136dp"
+            tools:layout_editor_absoluteY="127dp" />
+
+        <EditText
+            android:id="@+id/latP1"
+            android:layout_width="167dp"
+            android:layout_height="43dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:hint="Enter Latitude for P1"
+            android:inputType="numberSigned"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp"
+            tools:textSize="14sp" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
