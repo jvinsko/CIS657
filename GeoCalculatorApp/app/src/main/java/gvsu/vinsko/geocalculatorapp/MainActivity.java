@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.content_main);
 
         Button calcBtn = (Button) findViewById(R.id.calcBtn);
         Button clearBtn = (Button) findViewById(R.id.clearBtn);
@@ -50,12 +49,25 @@ public class MainActivity extends AppCompatActivity {
                 p2.setLongitude(longP2Double);
 
                 float distanceInKm = (p1.distanceTo(p2))/1000;
-                String distString = String.format("%.2f", distanceInKm);
-                distResult.setText("" + distString + " kilometers");
+                if(distUnits.matches("Kilometers")) {
+                    String distString = String.format("%.2f", distanceInKm);
+                    distResult.setText("" + distString + " kilometers");
+                } else {
+                    double distanceInMiles = distanceInKm * 0.621371;
+                    String distString = String.format("%.2f", distanceInMiles);
+                    distResult.setText("" + distString + " miles");
+                }
+
 
                 float bearingInDeg = (p1.bearingTo(p2));
-                String bearString = String.format("%.2f", bearingInDeg);
-                bearResult.setText("" + bearString + " degrees");
+                if(bearUnits.matches("Degrees")) {
+                    String bearString = String.format("%.2f", bearingInDeg);
+                    bearResult.setText("" + bearString + " degrees");
+                } else {
+                    double bearingInMil = bearingInDeg * 17.777777777778;
+                    String bearString = String.format("%.2f", bearingInMil);
+                    bearResult.setText("" + bearString + " mils");
+                }
             }
         });
 
