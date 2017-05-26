@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
         calcBtn.setOnClickListener(v -> {
             if(latP1.getText().toString().matches("") || latP2.getText().toString().matches("") || longP1.getText().toString().matches("") || longP2.getText().toString().matches("")) {
-                distResult.setText("Fill all four boxes.");
-                bearResult.setText("Fill all four boxes.");
+                distResult.setText("Distance: Fill all four boxes.");
+                bearResult.setText("Bearing: Fill all four boxes.");
             } else {
                 double latP1Double = Double.parseDouble(latP1.getText().toString());
                 double latP2Double = Double.parseDouble(latP2.getText().toString());
@@ -51,22 +51,22 @@ public class MainActivity extends AppCompatActivity {
                 float distanceInKm = (p1.distanceTo(p2))/1000;
                 if(distUnits.matches("Kilometers")) {
                     String distString = String.format("%.2f", distanceInKm);
-                    distResult.setText("" + distString + " kilometers");
+                    distResult.setText("Distance: " + distString + " kilometers");
                 } else {
                     double distanceInMiles = distanceInKm * 0.621371;
                     String distString = String.format("%.2f", distanceInMiles);
-                    distResult.setText("" + distString + " miles");
+                    distResult.setText("Distance: " + distString + " miles");
                 }
 
 
                 float bearingInDeg = (p1.bearingTo(p2));
                 if(bearUnits.matches("Degrees")) {
                     String bearString = String.format("%.2f", bearingInDeg);
-                    bearResult.setText("" + bearString + " degrees");
+                    bearResult.setText("Bearing: " + bearString + " degrees");
                 } else {
                     double bearingInMil = bearingInDeg * 17.777777777778;
                     String bearString = String.format("%.2f", bearingInMil);
-                    bearResult.setText("" + bearString + " mils");
+                    bearResult.setText("Bearing: " + bearString + " mils");
                 }
             }
         });
@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
             latP2.setText("");
             longP1.setText("");
             longP2.setText("");
-            distResult.setText("");
-            bearResult.setText("");
+            distResult.setText("Distance: ");
+            bearResult.setText("Bearing: ");
         });
     }
 

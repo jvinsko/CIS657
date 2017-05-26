@@ -8,6 +8,6 @@
         <item>"Degrees"</item>
         <item>"Mils"</item>
     </string-array>
-    <string name="title_activity_junk">junkActivity</string>
-    <string name="title_activity_junk2">Junk2Activity</string>
+    <string name="title_activity_settings">Settings</string>
+
 </resources>

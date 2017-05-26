@@ -13,6 +13,9 @@ android {
         jackOptions {
             enabled true
         }
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
     buildTypes {
         release {
