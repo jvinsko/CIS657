@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController, SettingsViewControllerDelegate {
+class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryTableViewControllerDelegate {
 
     @IBOutlet weak var latP1: UITextField!
     @IBOutlet weak var longP1: UITextField!
@@ -17,9 +17,14 @@ class ViewController: UIViewController, SettingsViewControllerDelegate {
     @IBOutlet weak var longP2: UITextField!
     @IBOutlet weak var distanceResult: UILabel!
     @IBOutlet weak var bearingResult: UILabel!
+    @IBOutlet weak var calcBtn: GeoCalcButton!
+    
     
     var distSetting: String = "Kilometers"
     var bearSetting: String = "Degrees"
+    
+    var entries : [LocationLookup] = [LocationLookup(origLat: 90.0, origLng: 0.0, destLat: -90.0, destLng: 0.0, timestamp: Date.distantPast),
+                                      LocationLookup(origLat: -90.0, origLng: 0.0, destLat: 90.0, destLng: 0.0, timestamp: Date.distantFuture)]
     
     func DegreesToRadians(degrees: Double) -> Double {
         return degrees * Double.pi / 180
@@ -48,9 +53,28 @@ class ViewController: UIViewController, SettingsViewControllerDelegate {
     func settingsChanged(distanceUnits: String, bearingUnits: String){
         distSetting = distanceUnits
         bearSetting = bearingUnits
+        calcBtn.sendActions(for: .touchUpInside)
+    }
+    
+    func selectEntry(entry: LocationLookup) {
+        var printStr: String = String(format: "%.4f", entry.origLat)
+        latP1.text = printStr
+        printStr = String(format: "%.4f", entry.origLng)
+        longP1.text = printStr
+        printStr = String(format: "%.4f", entry.destLat)
+        latP2.text = printStr
+        printStr = String(format: "%.4f", entry.destLng)
+        longP2.text = printStr
+        calcBtn.sendActions(for: .touchUpInside)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "historySegue" {
+            if let dest = segue.destination as? HistoryTableViewController {
+                dest.entries = self.entries
+                dest.historyDelegate = self
+            }
+        }
         if let dest = segue.destination as? SettingsViewController {
             dest.delegate = self
         }
@@ -90,6 +114,8 @@ class ViewController: UIViewController, SettingsViewControllerDelegate {
                 let bearingString: String = String(format: "%.2f", milBearing)
                 bearingResult.text = "\(bearingString) mils"
             }
+            
+            entries.append(LocationLookup(origLat: latP1Val, origLng: longP1Val, destLat: latP2Val, destLng: longP2Val, timestamp: Date()))
         }
     }
     
