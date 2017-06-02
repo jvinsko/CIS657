@@ -5,4 +5,8 @@
         android:orderInCategory="1"
         android:showAsAction="never"
         android:title="Settings"/>
+    <item android:title="History"
+        android:id="@+id/action_history"
+        android:orderInCategory="2"
+        android:showAsAction="never"/>
 </menu>

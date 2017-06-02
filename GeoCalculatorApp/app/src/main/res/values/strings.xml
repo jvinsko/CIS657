@@ -9,5 +9,6 @@
         <item>"Mils"</item>
     </string-array>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_history">HistoryActivity</string>
 
 </resources>
