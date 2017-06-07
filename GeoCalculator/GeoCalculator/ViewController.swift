@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import Firebase
 
 class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryTableViewControllerDelegate {
 
@@ -22,6 +23,8 @@ class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryT
     
     var distSetting: String = "Kilometers"
     var bearSetting: String = "Degrees"
+    
+    fileprivate var ref : DatabaseReference?
     
     var entries : [LocationLookup] = [LocationLookup(origLat: 90.0, origLng: 0.0, destLat: -90.0, destLng: 0.0, timestamp: Date.distantPast),
                                       LocationLookup(origLat: -90.0, origLng: 0.0, destLat: 90.0, destLng: 0.0, timestamp: Date.distantFuture)]
@@ -40,8 +43,33 @@ class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryT
         self.view.backgroundColor = BACKGROUND_COLOR
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         self.view.addGestureRecognizer(tap)
+        
+        self.ref = Database.database().reference()
+        self.registerForFireBaseUpdates()
     }
 
+    fileprivate func registerForFireBaseUpdates()
+    {
+        self.ref!.child("history").observe(.value, with: { snapshot in
+            if let postDict = snapshot.value as? [String : AnyObject] {
+                var tmpItems = [LocationLookup]()
+                for (_,val) in postDict.enumerated() {
+                    let entry = val.1 as! Dictionary<String,AnyObject>
+                    let timestamp = entry["timestamp"] as! String?
+                    let origLat = entry["origLat"] as! Double?
+                    let origLng = entry["origLng"] as! Double?
+                    let destLat = entry["destLat"] as! Double?
+                    let destLng = entry["destLng"] as! Double?
+                    tmpItems.append(LocationLookup(origLat: origLat!,
+                                                   origLng: origLng!, destLat: destLat!,
+                                                   destLng: destLng!,
+                                                   timestamp: (timestamp?.dateFromISO8601)!))
+                }
+                self.entries = tmpItems
+            }
+        })
+    }
+    
     func dismissKeyboard() {
         self.view.endEditing(true)
     }
@@ -74,9 +102,14 @@ class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryT
                 dest.entries = self.entries
                 dest.historyDelegate = self
             }
-        }
-        if let dest = segue.destination as? SettingsViewController {
-            dest.delegate = self
+        } else if segue.identifier == "searchSegue" {
+            if let dest = segue.destination as? LocationSearchViewController {
+                dest.delegate = self
+            }
+        } else {
+            if let dest = segue.destination as? SettingsViewController {
+                dest.delegate = self
+            }
         }
     }
 
@@ -115,8 +148,21 @@ class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryT
                 bearingResult.text = "\(bearingString) mils"
             }
             
-            entries.append(LocationLookup(origLat: latP1Val, origLng: longP1Val, destLat: latP2Val, destLng: longP2Val, timestamp: Date()))
+            // save history to firebase
+            let entry = LocationLookup(origLat: latP1Val, origLng: longP1Val, destLat: latP2Val, destLng: longP2Val, timestamp: Date())
+            let newChild = self.ref?.child("history").childByAutoId()
+            newChild?.setValue(self.toDictionary(vals: entry))
         }
+    }
+    
+    func toDictionary(vals: LocationLookup) -> NSDictionary {
+        return [
+            "timestamp": NSString(string: (vals.timestamp.iso8601)),
+            "origLat" : NSNumber(value: vals.origLat),
+            "origLng" : NSNumber(value: vals.origLng),
+            "destLat" : NSNumber(value: vals.destLat),
+            "destLng" : NSNumber(value: vals.destLng),
+        ]
     }
     
     @IBAction func clearBtnPresed(_ sender: UIButton) {
@@ -129,4 +175,44 @@ class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryT
     }
 }
 
+extension ViewController: LocationSearchDelegate {
+    func set(calculationData: LocationLookup)
+    {
+        self.latP1.text = "\(calculationData.origLat)"
+        self.longP1.text = "\(calculationData.origLng)"
+        self.latP2.text = "\(calculationData.destLat)"
+        self.longP2.text = "\(calculationData.destLng)"
+        self.calcBtn.sendActions(for: .touchUpInside)
+    }
+}
 
+extension Date {
+    struct Formatter {
+        static let iso8601: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.calendar = Calendar(identifier: .iso8601)
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"
+            return formatter
+        }()
+        
+        static let short: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            return formatter
+        }()
+    }
+    
+    var short: String {
+        return Formatter.short.string(from: self)
+    }
+    
+    var iso8601: String {
+        return Formatter.iso8601.string(from: self)
+    }
+}
+
+extension String {
+    var dateFromISO8601: Date? {
+        return Date.Formatter.iso8601.date(from: self)
+    }
+}

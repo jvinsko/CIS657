@@ -211,17 +211,3 @@ extension Double {
         return (self * divisor).rounded() / divisor
     }
 }
-
-extension Date {
-    struct Formatter {
-        static let short: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
-            return formatter
-        }()
-    }
-    
-    var short: String {
-        return Formatter.short.string(from: self)
-    }
-}
