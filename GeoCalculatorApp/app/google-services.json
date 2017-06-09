@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "506687751599",
+    "firebase_url": "https://geocalcandroid-1496963869484.firebaseio.com",
+    "project_id": "geocalcandroid-1496963869484",
+    "storage_bucket": "geocalcandroid-1496963869484.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506687751599:android:336008f918d8f4ff",
+        "android_client_info": {
+          "package_name": "gvsu.vinsko.geocalculatorapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506687751599-pj2cbc74p0i1mhd4aqvs66sdol86alvk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARJl9FWjXZ2gy991BdwWDFE0PzcObX3X4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,14 +1,16 @@
 package gvsu.vinsko.geocalculatorapp;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import gvsu.vinsko.geocalculatorapp.dummy.HistoryContent;
+import org.parceler.Parcels;
 
 public class HistoryActivity extends AppCompatActivity implements HistoryFragment.OnListFragmentInteractionListener {
 
@@ -30,11 +32,11 @@ public class HistoryActivity extends AppCompatActivity implements HistoryFragmen
     }
 
     @Override
-    public void onListFragmentInteraction(HistoryContent.HistoryItem item) {
+    public void onListFragmentInteraction(LocationLookup item) {
         System.out.println("Interact!");
         Intent intent = new Intent();
-        String[] vals = {item.origLat, item.origLng, item.destLat, item.destLng};
-        intent.putExtra("item", vals);
+        Parcelable parcel = Parcels.wrap(item);
+        intent.putExtra("LL", parcel);
         setResult(MainActivity.HISTORY_RESULT,intent);
         finish();
     }

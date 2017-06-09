@@ -146,13 +146,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tired of Typing?"
-        app:layout_constraintBaseline_toBaselineOf="@+id/chainButton"
-        app:layout_constraintRight_toLeftOf="@+id/chainButton"
+        app:layout_constraintBaseline_toBaselineOf="@+id/searchBtn"
+        app:layout_constraintRight_toLeftOf="@+id/searchBtn"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed" />
 
     <Button
-        android:id="@+id/chainButton"
+        android:id="@+id/searchBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SEARCH"
