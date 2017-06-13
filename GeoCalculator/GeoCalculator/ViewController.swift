@@ -20,6 +20,14 @@ class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryT
     @IBOutlet weak var bearingResult: UILabel!
     @IBOutlet weak var calcBtn: GeoCalcButton!
     
+    @IBOutlet weak var currWeatherImage: UIImageView!
+    @IBOutlet weak var currSummaryLabel: GeoCalcLabel!
+    @IBOutlet weak var currTempLabel: GeoCalcLabel!
+    @IBOutlet weak var destWeatherImage: UIImageView!
+    @IBOutlet weak var destSummaryLabel: GeoCalcLabel!
+    @IBOutlet weak var destTempLabel: GeoCalcLabel!
+    
+    let wAPI = DarkSkyWeatherService.getInstance()
     
     var distSetting: String = "Kilometers"
     var bearSetting: String = "Degrees"
@@ -43,6 +51,7 @@ class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryT
         self.view.backgroundColor = BACKGROUND_COLOR
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         self.view.addGestureRecognizer(tap)
+        self.clearWeatherViews()
         
         self.ref = Database.database().reference()
         self.registerForFireBaseUpdates()
@@ -76,6 +85,15 @@ class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryT
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func clearWeatherViews() {
+        self.currWeatherImage.image = nil
+        self.currTempLabel.text = ""
+        self.currSummaryLabel.text = ""
+        self.destWeatherImage.image = nil
+        self.destTempLabel.text = ""
+        self.destSummaryLabel.text = ""
     }
     
     func settingsChanged(distanceUnits: String, bearingUnits: String){
@@ -152,6 +170,26 @@ class ViewController: UIViewController, SettingsViewControllerDelegate, HistoryT
             let entry = LocationLookup(origLat: latP1Val, origLng: longP1Val, destLat: latP2Val, destLng: longP2Val, timestamp: Date())
             let newChild = self.ref?.child("history").childByAutoId()
             newChild?.setValue(self.toDictionary(vals: entry))
+            
+            wAPI.getWeatherForDate(date: Date(), forLocation: (latP1Val, longP1Val)) { (weather) in
+                if let w = weather {
+                    DispatchQueue.main.async {
+                        self.currSummaryLabel.text = w.summary
+                        self.currTempLabel.text = "\(w.temperature.roundTo(places: 1))°"
+                        self.currWeatherImage.image = UIImage(named: w.iconName)
+                    }
+                }
+            }
+            
+            wAPI.getWeatherForDate(date: Date(), forLocation: (latP2Val, longP2Val)) { (weather) in
+                if let w = weather {
+                    DispatchQueue.main.async {
+                        self.destSummaryLabel.text = w.summary
+                        self.destTempLabel.text = "\(w.temperature.roundTo(places: 1))°"
+                        self.destWeatherImage.image = UIImage(named: w.iconName)
+                    }
+                }
+            }
         }
     }
     

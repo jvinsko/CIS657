@@ -15,6 +15,9 @@
 		5D4245F71ED50F6700C83947 /* GeoCalcLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4245F61ED50F6700C83947 /* GeoCalcLabel.swift */; };
 		5D688B3D1EDE685A002D9A3E /* LocationLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D688B3C1EDE685A002D9A3E /* LocationLookup.swift */; };
 		5D688B411EDE807A002D9A3E /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D688B401EDE807A002D9A3E /* HistoryTableViewController.swift */; };
+		5DAFA7EC1EF09E1B00BDC9E0 /* Weather.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DAFA7EB1EF09E1B00BDC9E0 /* Weather.xcassets */; };
+		5DAFA7EE1EF09F1200BDC9E0 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAFA7ED1EF09F1200BDC9E0 /* Weather.swift */; };
+		5DAFA7F01EF09FF100BDC9E0 /* DarkSkyWeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAFA7EF1EF09FF100BDC9E0 /* DarkSkyWeatherService.swift */; };
 		5DE299E81EDF903200FB19BF /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE299E71EDF903200FB19BF /* HistoryTableViewCell.swift */; };
 		5DE5500F1ECD0E1100990C0A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE5500E1ECD0E1100990C0A /* SettingsViewController.swift */; };
 		5DF1C27F1ECCBBAD00EEF476 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF1C27E1ECCBBAD00EEF476 /* AppDelegate.swift */; };
@@ -56,6 +59,9 @@
 		5D4245F61ED50F6700C83947 /* GeoCalcLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoCalcLabel.swift; sourceTree = "<group>"; };
 		5D688B3C1EDE685A002D9A3E /* LocationLookup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationLookup.swift; sourceTree = "<group>"; };
 		5D688B401EDE807A002D9A3E /* HistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
+		5DAFA7EB1EF09E1B00BDC9E0 /* Weather.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Weather.xcassets; path = ../../../../Downloads/Weather.xcassets; sourceTree = "<group>"; };
+		5DAFA7ED1EF09F1200BDC9E0 /* Weather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
+		5DAFA7EF1EF09FF100BDC9E0 /* DarkSkyWeatherService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DarkSkyWeatherService.swift; sourceTree = "<group>"; };
 		5DE299E71EDF903200FB19BF /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
 		5DE5500E1ECD0E1100990C0A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		5DF1C27B1ECCBBAD00EEF476 /* GeoCalculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoCalculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,6 +139,8 @@
 		5DF1C2721ECCBBAD00EEF476 = {
 			isa = PBXGroup;
 			children = (
+				5DAFA7EF1EF09FF100BDC9E0 /* DarkSkyWeatherService.swift */,
+				5DAFA7ED1EF09F1200BDC9E0 /* Weather.swift */,
 				5D3B46091EE7780400F2749D /* GoogleService-Info.plist */,
 				5D3B46071EE7710600F2749D /* LocationSearchViewController.swift */,
 				5DE299E71EDF903200FB19BF /* HistoryTableViewCell.swift */,
@@ -168,6 +176,7 @@
 				5DF1C2801ECCBBAD00EEF476 /* ViewController.swift */,
 				5DF1C2821ECCBBAD00EEF476 /* Main.storyboard */,
 				5DF1C2851ECCBBAD00EEF476 /* Assets.xcassets */,
+				5DAFA7EB1EF09E1B00BDC9E0 /* Weather.xcassets */,
 				5DF1C2871ECCBBAD00EEF476 /* LaunchScreen.storyboard */,
 				5DF1C28A1ECCBBAD00EEF476 /* Info.plist */,
 			);
@@ -308,6 +317,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DAFA7EC1EF09E1B00BDC9E0 /* Weather.xcassets in Resources */,
 				5DF1C2891ECCBBAD00EEF476 /* LaunchScreen.storyboard in Resources */,
 				5D3B460A1EE7780400F2749D /* GoogleService-Info.plist in Resources */,
 				5DF1C2861ECCBBAD00EEF476 /* Assets.xcassets in Resources */,
@@ -477,6 +487,8 @@
 				5DE299E81EDF903200FB19BF /* HistoryTableViewCell.swift in Sources */,
 				5D688B411EDE807A002D9A3E /* HistoryTableViewController.swift in Sources */,
 				5D3232A41ED50A3F00F55E5E /* GeoCalcTextField.swift in Sources */,
+				5DAFA7EE1EF09F1200BDC9E0 /* Weather.swift in Sources */,
+				5DAFA7F01EF09FF100BDC9E0 /* DarkSkyWeatherService.swift in Sources */,
 				5DF1C2811ECCBBAD00EEF476 /* ViewController.swift in Sources */,
 				5DF1C27F1ECCBBAD00EEF476 /* AppDelegate.swift in Sources */,
 				5D3232A61ED50DFE00F55E5E /* GeoCalcButton.swift in Sources */,
