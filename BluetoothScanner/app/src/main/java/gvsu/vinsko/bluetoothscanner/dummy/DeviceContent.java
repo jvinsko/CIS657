@@ -25,6 +25,10 @@ public class DeviceContent {
 
     private static final int COUNT = 25;
 
+    public static void addItem(DeviceItem item) {
+        ITEMS.add(item);
+    }
+
     static {
         DeviceItem di = new DeviceItem("Jon's Phone", "-59", false);
         ITEMS.add(di);
