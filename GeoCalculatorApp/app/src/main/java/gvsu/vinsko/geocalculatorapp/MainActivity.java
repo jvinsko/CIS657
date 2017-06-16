@@ -1,13 +1,20 @@
 package gvsu.vinsko.geocalculatorapp;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Parcelable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.location.Location;
 
@@ -24,6 +31,10 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import gvsu.vinsko.geocalculatorapp.webservice.WeatherService;
+
+import static gvsu.vinsko.geocalculatorapp.webservice.WeatherService.BROADCAST_WEATHER;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +57,13 @@ public class MainActivity extends AppCompatActivity {
     private EditText longP1;
     private EditText longP2;
 
+    private TextView currSum;
+    private TextView currTemp;
+    private ImageView currImage;
+    private TextView destSum;
+    private TextView destTemp;
+    private ImageView destImage;
+
     private DatabaseReference topRef;
 
     @Override
@@ -65,6 +83,13 @@ public class MainActivity extends AppCompatActivity {
         longP1 = (EditText) findViewById(R.id.latP2);
         longP2 = (EditText) findViewById(R.id.longP2);
 
+        currSum = (TextView) findViewById(R.id.currSum);
+        currTemp = (TextView) findViewById(R.id.currTemp);
+        currImage = (ImageView) findViewById(R.id.currImage);
+        destSum = (TextView) findViewById(R.id.destSum);
+        destTemp = (TextView) findViewById(R.id.destTemp);
+        destImage = (ImageView) findViewById(R.id.destImage);
+
         calcBtn.setOnClickListener(v -> {
             if(latP1.getText().toString().matches("") || latP2.getText().toString().matches("") || longP1.getText().toString().matches("") || longP2.getText().toString().matches("")) {
                 distResult.setText("Distance: Fill all four boxes.");
@@ -81,12 +106,22 @@ public class MainActivity extends AppCompatActivity {
             longP2.setText("");
             distResult.setText("Distance: ");
             bearResult.setText("Bearing: ");
+            setWeatherViews(View.INVISIBLE);
         });
 
         searchBtn.setOnClickListener(v -> {
            Intent intent = new Intent(MainActivity.this, LocationSearchActivity.class);
            startActivityForResult(intent, SEARCH_RESULT);
         });
+    }
+
+    private void setWeatherViews(int visible) {
+        currImage.setVisibility(visible);
+        currSum.setVisibility(visible);
+        currTemp.setVisibility(visible);
+        destImage.setVisibility(visible);
+        destSum.setVisibility(visible);
+        destTemp.setVisibility(visible);
     }
 
     @Override
@@ -101,12 +136,16 @@ public class MainActivity extends AppCompatActivity {
         allHistory.clear();
         topRef = FirebaseDatabase.getInstance().getReference("history");
         topRef.addChildEventListener (chEvListener);
+        IntentFilter weatherFilter = new IntentFilter(BROADCAST_WEATHER);
+        LocalBroadcastManager.getInstance(this).registerReceiver(weatherReceiver, weatherFilter);
+        setWeatherViews(View.INVISIBLE);
     }
 
     @Override
     public void onPause(){
         super.onPause();
         topRef.removeEventListener(chEvListener);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(weatherReceiver);
     }
 
     @Override
@@ -124,6 +163,28 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private BroadcastReceiver weatherReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            double temp = bundle.getDouble("TEMPERATURE");
+            String summary = bundle.getString("SUMMARY");
+            String icon = bundle.getString("ICON").replaceAll("-", "_");
+            String key = bundle.getString("KEY");
+            int resID = getResources().getIdentifier(icon , "drawable", getPackageName());
+            setWeatherViews(View.VISIBLE);
+            if (key.equals("p1")) {
+                currSum.setText(summary);
+                currTemp.setText(Double.toString(temp));
+                currImage.setImageResource(resID);
+            } else {
+                destSum.setText(summary);
+                destTemp.setText(Double.toString(temp));
+                destImage.setImageResource(resID);
+            }
+        }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -197,6 +258,9 @@ public class MainActivity extends AppCompatActivity {
         DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
         entry.setTimestamp(fmt.print(DateTime.now()));
         topRef.push().setValue(entry);
+
+        WeatherService.startGetWeather(this, Double.toString(latP1Double), Double.toString(longP1Double), "p1");
+        WeatherService.startGetWeather(this, Double.toString(latP2Double), Double.toString(longP2Double), "p2");
     }
 
     private ChildEventListener chEvListener = new ChildEventListener() {
