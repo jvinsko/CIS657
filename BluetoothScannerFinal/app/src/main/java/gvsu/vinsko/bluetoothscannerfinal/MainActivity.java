@@ -36,17 +36,8 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*scanBtn.setOnClickListener(v -> {
-            Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
-            if (pairedDevices.size() > 0) {
-                for (BluetoothDevice device : pairedDevices) {
-                    DeviceContent.DeviceItem item = new DeviceContent.DeviceItem(device.getName(),device.getAddress(),false);
-                    DeviceContent.addItem(item);
-                }
-            }
-            btAdapter.startDiscovery();
-            recreate();
-        });*/
+        scanBtn.setOnClickListener(v -> {
+        });
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         // Phone does not support Bluetooth so let the user know and exit.
@@ -67,11 +58,23 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             startActivityForResult(enableBT, REQUEST_BLUETOOTH);
         }
 
+        Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+        if(pairedDevices.size() > 0) {
+            for(BluetoothDevice device : pairedDevices) {
+                DeviceContent.DeviceItem item = new DeviceContent.DeviceItem(device.getName(), "-50", false);
+                DeviceContent.addItem(item);
+            }
+        }
+
         btAdapter.startDiscovery();
+
 
         // Register for broadcasts when a device is discovered.
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(bReceiver, filter);
+        this.registerReceiver(bReceiver, filter);
+        IntentFilter filter2 = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        this.registerReceiver(bReceiver, filter2);
+
     }
 
     private final BroadcastReceiver bReceiver = new BroadcastReceiver() {
@@ -79,9 +82,11 @@ public class MainActivity extends AppCompatActivity implements DeviceFragment.On
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                DeviceContent.DeviceItem item = new DeviceContent.DeviceItem(device.getName(), device.getAddress(),false);
+                DeviceContent.DeviceItem item = new DeviceContent.DeviceItem(device.getName(), "-50", false);
                 DeviceContent.addItem(item);
                 recreate();
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                btAdapter.startDiscovery();
             }
         }
     };
