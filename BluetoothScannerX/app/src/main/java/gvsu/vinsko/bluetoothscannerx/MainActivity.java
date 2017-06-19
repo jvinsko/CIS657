@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Button;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Set;
@@ -36,7 +37,8 @@ public class  MainActivity extends AppCompatActivity implements DeviceFragment.O
         logoutBtn = (Button) findViewById(R.id.logoutBtn);
 
         logoutBtn.setOnClickListener(v -> {
-            mAuth.signOut();
+            //mAuth.signOut();
+            mAuth.getInstance().signOut();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
