@@ -11,24 +11,35 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Button;
+
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Set;
 import gvsu.vinsko.bluetoothscannerx.dummy.DeviceContent;
 
 public class  MainActivity extends AppCompatActivity implements DeviceFragment.OnListFragmentInteractionListener {
     public static int REQUEST_BLUETOOTH = 1;
 
-    private Button scanBtn;
+    private Button logoutBtn;
     private BluetoothAdapter btAdapter;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        scanBtn = (Button) findViewById(R.id.scanBtn);
+        mAuth = FirebaseAuth.getInstance();
 
-        scanBtn.setOnClickListener(v -> {
+        logoutBtn = (Button) findViewById(R.id.logoutBtn);
+
+        logoutBtn.setOnClickListener(v -> {
+            mAuth.signOut();
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -71,9 +82,14 @@ public class  MainActivity extends AppCompatActivity implements DeviceFragment.O
 
     private final BroadcastReceiver bReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
+
+            Log.d("App", "onReceive");
+
             String action = intent.getAction();
+
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                BluetoothDevice device = intent
+                        .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 DeviceContent.DeviceItem item = new DeviceContent.DeviceItem(device.getName(), "-50", false);
                 DeviceContent.addItem(item);
                 recreate();
