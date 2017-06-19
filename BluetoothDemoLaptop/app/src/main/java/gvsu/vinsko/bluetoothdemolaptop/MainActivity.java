@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArrayList<String> mDeviceList = new ArrayList<String>();
+    private ArrayList<String> tempDeviceList = new ArrayList<String>();
     private BluetoothAdapter mBluetoothAdapter;
 
     private LocationManager lm;
@@ -110,13 +111,14 @@ public class MainActivity extends AppCompatActivity {
                 BluetoothDevice device = intent
                         .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-                mDeviceList.add(device.getName() + "\n" + device.getAddress());
+                tempDeviceList.add(device.getName() + "\n" + device.getAddress());
 
                 Log.i("BT", device.getName() + "\n" + device.getAddress());
-
+            } else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                mDeviceList = (ArrayList<String>)tempDeviceList.clone();;
                 listView.setAdapter(new ArrayAdapter<String>(context,
                         android.R.layout.simple_list_item_1, mDeviceList));
-            } else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                tempDeviceList.clear();
                 mBluetoothAdapter.startDiscovery();
             }
         }
