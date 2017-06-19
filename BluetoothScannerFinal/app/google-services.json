@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "175379470267",
+    "firebase_url": "https://bluetoothscanner.firebaseio.com",
+    "project_id": "bluetoothscanner",
+    "storage_bucket": "bluetoothscanner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175379470267:android:db56a7b8a85fe4e4",
+        "android_client_info": {
+          "package_name": "gvsu.vinsko.bluetoothscannerfinal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "175379470267-nn29f4uin9m87899ajdo2gv6lhna3b6n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAYeFgZO_-GrmTkiUenF6N8a-AVTxoFg8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
