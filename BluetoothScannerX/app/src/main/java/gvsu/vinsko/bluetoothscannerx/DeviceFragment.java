@@ -9,8 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import gvsu.vinsko.bluetoothscannerx.dummy.DeviceContent;
-import gvsu.vinsko.bluetoothscannerx.dummy.DeviceContent.DeviceItem;
+
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -26,11 +26,17 @@ public class DeviceFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
+    private RecyclerView recyclerView;
+
+    List<Device> currDevices;
+
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public DeviceFragment() {
+        currDevices = MainActivity.currDevices;
     }
 
     // TODO: Customize parameter initialization
@@ -59,14 +65,15 @@ public class DeviceFragment extends Fragment {
 
         // Set the adapter
         if (view instanceof RecyclerView) {
+            currDevices = MainActivity.currDevices;
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new gvsu.vinsko.bluetoothscannerx.DeviceAdapter(DeviceContent.ITEMS, mListener));
+            recyclerView.setAdapter(new DeviceAdapter(currDevices, mListener));
         }
         return view;
     }
@@ -89,6 +96,13 @@ public class DeviceFragment extends Fragment {
         mListener = null;
     }
 
+    public void refreshList() {
+        if(recyclerView.getAdapter() != null) {
+            currDevices = MainActivity.currDevices;
+            recyclerView.setAdapter(new DeviceAdapter(currDevices, mListener));
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -101,6 +115,6 @@ public class DeviceFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DeviceItem item);
+        void onListFragmentInteraction(Device item);
     }
 }

@@ -7,21 +7,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import gvsu.vinsko.bluetoothscannerx.DeviceFragment.OnListFragmentInteractionListener;
-import gvsu.vinsko.bluetoothscannerx.dummy.DeviceContent.DeviceItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DeviceItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Device} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder> {
 
-    private final List<DeviceItem> mValues;
+    private final List<Device> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public DeviceAdapter(List<DeviceItem> items, OnListFragmentInteractionListener listener) {
+    public DeviceAdapter(List<Device> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,8 +35,12 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).name);
-        holder.mContentView.setText(mValues.get(position).rssi);
+        if(mValues.get(position).name == null){
+            holder.mIdView.setText("NULL");
+        } else {
+            holder.mIdView.setText(mValues.get(position).name);
+        }
+        holder.mContentView.setText(mValues.get(position).rssi + "");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,14 +56,18 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        if(mValues != null) {
+            return mValues.size();
+        } else {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DeviceItem mItem;
+        public Device mItem;
 
         public ViewHolder(View view) {
             super(view);
