@@ -8,22 +8,12 @@ import org.parceler.Parcel;
 
 @Parcel
 public class Device {
-    String _key;
     String name;
     String address;
     int rssi;
-    String lastSeen;
-    double lastLat;
-    double lastLong;
-    Boolean stationary;
-
-    public String get_key() {
-        return _key;
-    }
-
-    public void set_key(String _key) {
-        this._key = _key;
-    }
+    String foundDate;
+    double foundLat;
+    double foundLong;
 
     public String getName() {
         return name;
@@ -45,33 +35,25 @@ public class Device {
 
     public void setRssi(int rssi) { this.rssi = rssi; }
 
-    public String getLastSeen() {
-        return lastSeen;
+    public String getFoundDate() {
+        return foundDate;
     }
 
-    public void setLastSeen(String lastSeen) {
-        this.lastSeen = lastSeen;
+    public void setFoundDate(String foundDate) {
+        this.foundDate = foundDate;
     }
 
-    public double getLastLat() {
-        return lastLat;
+    public double getFoundLat() {
+        return foundLat;
     }
 
-    public void setLastLat(double lastLat) { this.lastLat = lastLat; }
+    public void setFoundLat(double foundLat) { this.foundLat = foundLat; }
 
-    public double getLastLong() {
-        return lastLong;
+    public double getFoundLong() {
+        return foundLong;
     }
 
-    public void setLastLong(double lastLong) {
-        this.lastLong = lastLong;
-    }
-
-    public Boolean getStationary() {
-        return stationary;
-    }
-
-    public void setStationary(Boolean stationary) {
-        this.stationary = stationary;
+    public void setFoundLong(double foundLong) {
+        this.foundLong = foundLong;
     }
 }

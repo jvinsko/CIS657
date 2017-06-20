@@ -99,6 +99,11 @@ public class DeviceFragment extends Fragment {
     public void refreshList() {
         if(recyclerView.getAdapter() != null) {
             currDevices = MainActivity.currDevices;
+            if(currDevices.isEmpty()) {
+                Device d = new Device();
+                d.setName("No Devices Found :(");
+                currDevices.add(d);
+            }
             recyclerView.setAdapter(new DeviceAdapter(currDevices, mListener));
         }
     }

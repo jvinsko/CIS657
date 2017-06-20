@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         createBtn = (Button) findViewById(R.id.createBtn);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
+        password.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
         mAuth = FirebaseAuth.getInstance();
 

@@ -32,7 +32,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  MainActivity extends AppCompatActivity implements DeviceFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements DeviceFragment.OnListFragmentInteractionListener {
     public static int REQUEST_BLUETOOTH = 1;
 
     private Button logoutBtn;
@@ -43,6 +43,7 @@ public class  MainActivity extends AppCompatActivity implements DeviceFragment.O
     private DatabaseReference topRef;
 
     private LocationManager lm;
+    private Location location;
 
     private DateTimeFormatter fmt;
 
@@ -72,7 +73,8 @@ public class  MainActivity extends AppCompatActivity implements DeviceFragment.O
         loggedIn = (TextView) findViewById(R.id.loggedIn);
 
         Intent i = this.getIntent();
-        loggedIn.setText("Logged In As: " + i.getStringExtra("email"));
+        userEmail = i.getStringExtra("email");
+        loggedIn.setText("Logged In As: " + userEmail);
 
         logoutBtn.setOnClickListener(v -> {
             //mAuth.signOut();
@@ -89,6 +91,11 @@ public class  MainActivity extends AppCompatActivity implements DeviceFragment.O
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
             //return;
+        }
+        location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            currLong = location.getLongitude();
+            currLat = location.getLatitude();
         }
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -130,9 +137,8 @@ public class  MainActivity extends AppCompatActivity implements DeviceFragment.O
                 Device item = new Device();
                 item.setName(device.getName());
                 item.setAddress(device.getAddress());
-                int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
+                int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
                 item.setRssi(rssi);
-                item.setLastSeen(fmt.print(DateTime.now()));
                 tempDevices.add(item);
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 currDevices = new ArrayList<Device>(tempDevices);
@@ -146,38 +152,31 @@ public class  MainActivity extends AppCompatActivity implements DeviceFragment.O
         }
     };
 
-    private class FireBaseSendThread extends Thread{
-
-        Device device;
-        public FireBaseSendThread(Device device) {
-            this.device = device;
+    private Parcelable sendToFirebase(Device item) {
+        Device device = item;
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
-        @Override
-        public void run() {
-            Device item = new Device();
-            item.setName(device.getName());
-            item.setAddress(device.getAddress());
-            item.setLastSeen(fmt.print(DateTime.now()));
-            //TODO Add to firebase or change if in there.
-            String tempKey = isDeviceInFirebase(device.getAddress());
-            if(tempKey != null) {
-                try {
-                    topRef.child(userEmail).child(tempKey).child("lastSeen").setValue(item.getLastSeen());
-                    topRef.child(userEmail).child(tempKey).child("lastLat").setValue(currLat);
-                    topRef.child(userEmail).child(tempKey).child("lastLong").setValue(currLong);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                //TODO add new item to firebase
-            }
+        location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            currLong = location.getLongitude();
+            currLat = location.getLatitude();
+        } else {
+            currLong = 0.0;
+            currLat = 0.0;
         }
+        device.setFoundLat(currLat);
+        device.setFoundLong(currLong);
+        device.setFoundDate(fmt.print(DateTime.now()));
+        Parcelable parcel = Parcels.wrap(device);
+        return parcel;
     }
 
     @Override
-    public void onListFragmentInteraction(Device item) {
+    public void onListFragmentInteraction(Device device) {
         Intent intent = new Intent(this, DeviceDetailsActivity.class);
-        Parcelable parcel = Parcels.wrap(item);
+        Parcelable parcel = sendToFirebase(device);
         intent.putExtra("DEVICE", parcel);
         startActivity(intent);
     }
@@ -194,12 +193,5 @@ public class  MainActivity extends AppCompatActivity implements DeviceFragment.O
     protected void onDestroy() {
         unregisterReceiver(bReceiver);
         super.onDestroy();
-    }
-
-    private String isDeviceInFirebase(String deviceAddress) {
-        //Pull data from firebase
-        //Check for address
-        //Return key or null
-        return null;
     }
 }

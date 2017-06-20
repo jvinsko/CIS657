@@ -16,8 +16,9 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     private TextView nameLabel;
     private TextView addressLabel;
     private TextView rssiLabel;
-    private TextView stationaryLabel;
-    private TextView lastSeenDateLabel;
+    private TextView seenOnDateLabel;
+    private TextView seenAtLatLabel;
+    private TextView seenAtLongLabel;
 
     private Tracker mTracker;
 
@@ -32,8 +33,9 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         nameLabel = (TextView) findViewById(R.id.nameLabel);
         addressLabel = (TextView) findViewById(R.id.addressLabel);
         rssiLabel = (TextView) findViewById(R.id.rssiLabel);
-        stationaryLabel = (TextView) findViewById(R.id.stationaryLabel);
-        lastSeenDateLabel = (TextView) findViewById(R.id.lastSeenDateLabel);
+        seenOnDateLabel = (TextView) findViewById(R.id.seenOnDateLabel);
+        seenAtLatLabel = (TextView) findViewById(R.id.seenAtLatLabel);
+        seenAtLongLabel = (TextView) findViewById(R.id.seenAtLongLabel);
 
         Intent intent = this.getIntent();
         if (intent != null && intent.hasExtra("DEVICE")) {
@@ -43,16 +45,9 @@ public class DeviceDetailsActivity extends AppCompatActivity {
             nameLabel.setText("Name: " + d.getName());
             addressLabel.setText("Address: " + d.getAddress());
             rssiLabel.setText("RSSI: " + d.getRssi());
-            if(d.getStationary() == null) {
-                stationaryLabel.setText("Stationary: First Time Seen");
-            } else if(d.getStationary() == true) {
-                stationaryLabel.setText("Stationary: Unmoved Since Last Sighting");
-            } else if(d.getStationary() == false) {
-                stationaryLabel.setText("Stationary: Moved Since Last Sighting");
-            } else {
-                stationaryLabel.setText("Stationary: Not Enough Information");
-            }
-            lastSeenDateLabel.setText("Last Seen On: " + d.getLastSeen());
+            seenOnDateLabel.setText("Seen On: " + d.getFoundDate());
+            seenAtLatLabel.setText("Seen At: " + d.getFoundLat() + " Latitude");
+            seenAtLongLabel.setText("Seen At: " + d.getFoundLong() + " Longitude");
         }
 
         mTracker.setScreenName("MainActivity");
